@@ -8,21 +8,24 @@
         <PrintInfoTask Directory="$(MSBuildThisFileDirectory)" />
     </Target>
 
-    <!--Make ReferencePath to proccess-->
-    <Target Name="MTP_MakeReferencePath">
+    <!--Make References to proccess-->
+    <Target Name="MTP_MakeReferences">
         <ItemGroup>
-            <MTP_ReferencePath Include="@(ReferencePath->WithMetadataValue( 'MakeTypesPublic', 'true' ))" />
             <MTP_PackageReference Include="@(PackageReference->WithMetadataValue( 'MakeTypesPublic', 'true' ))" />
+            <MTP_ReferencePath Include="@(ReferencePath->WithMetadataValue( 'MakeTypesPublic', 'true' ))" />
         </ItemGroup>
     </Target>
-    <Target Name="MTP_MakeReferencePath_After" AfterTargets="MTP_MakeReferencePath" Outputs="%(MTP_PackageReference.Identity)">
+    <Target Name="MTP_MakeReferences_After" AfterTargets="MTP_MakeReferences" Outputs="%(MTP_PackageReference.Identity)">
+        <PropertyGroup>
+            <MTP_PackageReference>%(MTP_PackageReference.Identity)</MTP_PackageReference>
+        </PropertyGroup>
         <ItemGroup>
-            <MTP_ReferencePath Include="@(ReferencePath->WithMetadataValue( 'NugetPackageId', %(MTP_PackageReference.Identity) ))" />
+            <MTP_ReferencePath Include="@(ReferencePath->WithMetadataValue( 'NuGetPackageId', $(MTP_PackageReference) ))" />
         </ItemGroup>
     </Target>
 
-    <!--Produce assemblies with public types-->
-    <Target Name="MTP_ProduceAssemblies" Outputs="%(MTP_ReferencePath.Identity)">
+    <!--Make assemblies with public types-->
+    <Target Name="MTP_MakeAssemblies" Outputs="%(MTP_ReferencePath.Identity)">
         <PropertyGroup>
             <MTP_SourceReference>%(MTP_ReferencePath.Identity)</MTP_SourceReference>
             <MTP_TargetReference>$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\%(MTP_ReferencePath.Filename)%(MTP_ReferencePath.Extension)</MTP_TargetReference>
@@ -39,6 +42,6 @@
     <Target
         Name="MakeTypesPublic"
         AfterTargets="AfterResolveReferences"
-        DependsOnTargets="MTP_PrintInfo; MTP_MakeReferencePath; MTP_ProduceAssemblies" />
+        DependsOnTargets="MTP_PrintInfo; MTP_MakeReferences; MTP_MakeAssemblies" />
 
 </Project>
