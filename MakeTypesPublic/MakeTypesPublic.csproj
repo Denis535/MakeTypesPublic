@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+
+        <Id>MakeTypesPublic</Id>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionSuffix>alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
+
+        <Authors>Denis535</Authors>
+        <Company>Denis535</Company>
+        <Product>$(AssemblyName)</Product>
+
+        <Icon>Icon.png</Icon>
+        <Title>$(AssemblyName)</Title>
+        <Description></Description>
+        <Tags></Tags>
+
+        <ProjectUrl></ProjectUrl>
+        <RepositoryUrl></RepositoryUrl>
+
+        <IsTool>true</IsTool>
+        <DevelopmentDependency>true</DevelopmentDependency>
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <IncludeSymbols>false</IncludeSymbols>
+        <IncludeSource>false</IncludeSource>
+        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+
+        <BeforePack>$(BeforePack);BeforePack</BeforePack>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.3" GeneratePathProperty="true" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Readme.txt" Pack="true" PackagePath="/" />
+        <None Include="Icon.png" Pack="true" PackagePath="/" />
+        <None Include="Build/**" Pack="true" PackagePath="/build" />
+        <Content Include="Content/**" Pack="true" PackageCopyToOutput="true" PackageFlatten="false" />
+    </ItemGroup>
+
+    <Target Name="BeforePack">
+        <ItemGroup>
+            <FilesToDelete Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)*.nupkg" />
+        </ItemGroup>
+        <Delete Files="@(FilesToDelete)" />
+    </Target>
+
+    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+        <ItemGroup>
+            <BuildOutputInPackage Include="$(PkgMono_Cecil)\lib\netstandard2.0\*.*" />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="Push" AfterTargets="Pack">
+        <Exec Command="dotnet nuget push $(PackageOutputPath)*.nupkg --source Local" />
+    </Target>
+
+</Project>

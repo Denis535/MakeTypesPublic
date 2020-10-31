@@ -1,0 +1,44 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <UsingTask TaskName="MakeTypesPublic.Tasks.PrintInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
+    <UsingTask TaskName="MakeTypesPublic.Tasks.MakeTypesPublicTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
+
+    <!--Print info-->
+    <Target Name="MTP_PrintInfo">
+        <PrintInfoTask Directory="$(MSBuildThisFileDirectory)" />
+    </Target>
+
+    <!--Make ReferencePath to proccess-->
+    <Target Name="MTP_MakeReferencePath">
+        <ItemGroup>
+            <MTP_ReferencePath Include="@(ReferencePath->WithMetadataValue( 'MakeTypesPublic', 'true' ))" />
+            <MTP_PackageReference Include="@(PackageReference->WithMetadataValue( 'MakeTypesPublic', 'true' ))" />
+        </ItemGroup>
+    </Target>
+    <Target Name="MTP_MakeReferencePath_After" AfterTargets="MTP_MakeReferencePath" Outputs="%(MTP_PackageReference.Identity)">
+        <ItemGroup>
+            <MTP_ReferencePath Include="@(ReferencePath->WithMetadataValue( 'NugetPackageId', %(MTP_PackageReference.Identity) ))" />
+        </ItemGroup>
+    </Target>
+
+    <!--Produce assemblies with public types-->
+    <Target Name="MTP_ProduceAssemblies" Outputs="%(MTP_ReferencePath.Identity)">
+        <PropertyGroup>
+            <MTP_SourceReference>%(MTP_ReferencePath.Identity)</MTP_SourceReference>
+            <MTP_TargetReference>$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\%(MTP_ReferencePath.Filename)%(MTP_ReferencePath.Extension)</MTP_TargetReference>
+        </PropertyGroup>
+        <ItemGroup>
+            <ReferencePath Remove="$(MTP_SourceReference)" />
+            <ReferencePath Include="$(MTP_TargetReference)" />
+        </ItemGroup>
+        <MakeTypesPublicTask SourceReference="$(MTP_SourceReference)" TargetReference="$(MTP_TargetReference)" />
+        <Message Text="[MakeTypesPublic] Assembly with public types: $(MTP_TargetReference)" Importance="high" />
+    </Target>
+
+    <!--MakeTypesPublic-->
+    <Target
+        Name="MakeTypesPublic"
+        AfterTargets="AfterResolveReferences"
+        DependsOnTargets="MTP_PrintInfo; MTP_MakeReferencePath; MTP_ProduceAssemblies" />
+
+</Project>
