@@ -15,19 +15,15 @@
         public string DirectoryToSave { get; set; }
 
         [Output]
-        public string OldReference { get; set; }
-        [Output]
-        public string NewReference { get; set; }
+        public string Output { get; set; }
 
 
         public override bool Execute() {
             var assembly = AssemblyDefinition.ReadAssembly( Reference );
             AssemblyWithPublicTypesMaker.MakeTypesPublic( assembly, Log );
 
-            var path = Path.Combine( DirectoryToSave, Path.GetFileName( Reference ) );
-            OldReference = Reference;
-            NewReference = path;
-            Save( path, assembly, Log );
+            Output = Path.Combine( DirectoryToSave, Path.GetFileName( Reference ) );
+            Save( Output, assembly, Log );
             return true;
         }
 

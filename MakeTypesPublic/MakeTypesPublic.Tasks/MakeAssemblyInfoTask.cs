@@ -26,6 +26,9 @@
         [Required]
         public string DirectoryToSave { get; set; }
 
+        [Output]
+        public string Output { get; set; }
+
 
         public override bool Execute() {
             var builder = new StringBuilder();
@@ -35,8 +38,8 @@
             builder.AppendLine();
             builder.AppendLine( Declaration_IgnoresAccessChecksToAttribute );
 
-            var path = Path.Combine( DirectoryToSave, "AssemblyInfo.cs" );
-            Save( path, builder.ToString(), Log );
+            Output = Path.Combine( DirectoryToSave, "AssemblyInfo.cs" );
+            Save( Output, builder.ToString(), Log );
             return true;
         }
 

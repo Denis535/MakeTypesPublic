@@ -1,5 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+    <PropertyGroup>
+        <MTP_AssembliesPath>$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\</MTP_AssembliesPath>
+        <MTP_SourcesPath>$(BaseIntermediateOutputPath)\MakeTypesPublic\Sources\</MTP_SourcesPath>
+    </PropertyGroup>
+
     <UsingTask TaskName="MakeTypesPublic.Tasks.PrintInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
     <UsingTask TaskName="MakeTypesPublic.Tasks.MakeAssemblyTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
     <UsingTask TaskName="MakeTypesPublic.Tasks.MakeAssemblyInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
@@ -11,10 +16,6 @@
 
     <!--Init-->
     <Target Name="MTP_Init">
-        <PropertyGroup>
-            <MTP_AssembliesPath>$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\</MTP_AssembliesPath>
-            <MTP_SourcesPath>$(BaseIntermediateOutputPath)\MakeTypesPublic\Sources\</MTP_SourcesPath>
-        </PropertyGroup>
     </Target>
     <Target Name="MTP_Init_After" AfterTargets="MTP_Init" Outputs="%(ReferencePath.Identity)">
         <PropertyGroup>
@@ -29,14 +30,7 @@
 
     <!--Make assemblies-->
     <Target Name="MTP_MakeAssemblies" Outputs="%(MTP_ReferencePath.Identity)">
-        <MakeAssemblyTask Reference="%(MTP_ReferencePath.Identity)" DirectoryToSave="$(MTP_AssembliesPath)" >
-            <Output TaskParameter="OldReference" PropertyName="TMP_OldReference" />
-            <Output TaskParameter="NewReference" PropertyName="TMP_NewReference" />
-        </MakeAssemblyTask>
-        <ItemGroup>
-            <ReferencePath Remove="$(TMP_OldReference)" />
-            <ReferencePath Include="$(TMP_NewReference)" />
-        </ItemGroup>
+        <MakeAssemblyTask Reference="%(MTP_ReferencePath.Identity)" DirectoryToSave="$(MTP_AssembliesPath)" />
     </Target>
 
     <!--Make sources-->
@@ -48,6 +42,12 @@
     <Target
         Name="MakeTypesPublic"
         AfterTargets="AfterResolveReferences"
-        DependsOnTargets="MTP_PrintInfo; MTP_Init; MTP_MakeAssemblies; MTP_MakeSources" />
+        DependsOnTargets="MTP_PrintInfo; MTP_Init; MTP_MakeAssemblies; MTP_MakeSources">
+        <ItemGroup>
+            <ReferencePath Remove="@(MTP_ReferencePath)" />
+            <ReferencePath Include="$(MTP_AssembliesPath)\**" />
+            <Compile Include="$(MTP_SourcesPath)\**"/>
+        </ItemGroup>
+    </Target>
 
 </Project>
