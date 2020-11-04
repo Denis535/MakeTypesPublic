@@ -5,13 +5,13 @@
         <MTP_SourcesPath>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)\MakeTypesPublic\Sources\</MTP_SourcesPath>
     </PropertyGroup>
 
-    <UsingTask TaskName="MakeTypesPublic.Tasks.PrintInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
+    <UsingTask TaskName="MakeTypesPublic.Tasks.PrintPackageInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
     <UsingTask TaskName="MakeTypesPublic.Tasks.MakeAssemblyWithPublicTypesTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
     <UsingTask TaskName="MakeTypesPublic.Tasks.MakeAssemblyInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
 
     <!--Print info-->
     <Target Name="MTP_PrintInfo">
-        <PrintInfoTask Directory="$(MSBuildThisFileDirectory)" />
+        <PrintPackageInfoTask PackageDirectory="$(MSBuildThisFileDirectory)\.." />
     </Target>
 
     <!--Make source references-->
