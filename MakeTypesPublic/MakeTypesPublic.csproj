@@ -13,11 +13,11 @@
 
         <Icon>Icon.png</Icon>
         <Title>$(AssemblyName)</Title>
-        <Description></Description>
-        <Tags></Tags>
+        <Description>Allow access to non public types and members</Description>
+        <Tags>MSBuild;MakeTypesPublic;IgnoresAccessChecksToAttribute;InternalsVisibleToAttribute;IgnoresAccessChecksToGenerator</Tags>
 
-        <ProjectUrl></ProjectUrl>
-        <RepositoryUrl></RepositoryUrl>
+        <ProjectUrl>https://github.com/Denis535/MakeTypesPublic</ProjectUrl>
+        <RepositoryUrl>https://github.com/Denis535/MakeTypesPublic</RepositoryUrl>
 
         <IsTool>true</IsTool>
         <DevelopmentDependency>true</DevelopmentDependency>

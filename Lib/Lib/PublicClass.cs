@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Text;
+    using System.Threading.Tasks;
+    using Lib2;
 
     public class PublicClass {
 
@@ -21,23 +23,45 @@
         public event Action Instance_Event;
 
 
+        // Constructor
         static PublicClass() {
         }
         public PublicClass() {
         }
 
 
-        public static void Static_Method() {
+        // Method
+        public static string Static_Method() {
+            return "Value";
         }
-        public IEnumerable<object> Instance_Method() {
-            int v0 = 0, v1 = 1, v2 = 2;
+        public string Instance_Method() {
+            return "Value";
+        }
+
+
+        // Examples
+        internal static void Example() {
             try {
-                Trace.WriteLine( "Hello World !!!" );
-            } catch {
+                //var message = "Hello World !!!";
+                var message = new HelloWorldClass().ToString();
+                Trace.WriteLine( message );
+            } catch (Exception ex) {
+                Trace.WriteLine( ex );
             }
-            yield return v0;
-            yield return v1;
-            yield return v2;
+        }
+        internal static string Example_GetValue() {
+            return "Value";
+        }
+        internal static async Task<string> Example_GetValueAsync() {
+            await Task.Yield();
+            return "Value";
+        }
+        internal static IEnumerable<string> Example_GetValues() {
+            yield return "Value";
+        }
+        internal static async IAsyncEnumerable<string> Example_GetValuesAsync() {
+            await Task.Yield();
+            yield return "Value";
         }
 
 

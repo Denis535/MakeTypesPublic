@@ -1,7 +1,6 @@
 ﻿namespace Lib {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Text;
 
     internal class InternalClass {
@@ -21,23 +20,19 @@
         private event Action Instance_Event;
 
 
+        // Constructor
         static InternalClass() {
         }
         private InternalClass() {
         }
 
 
-        private static void Static_Method() {
+        // Method
+        private static string Static_Method() {
+            return "Value";
         }
-        private IEnumerable<object> Instance_Method() {
-            int v0 = 0, v1 = 1, v2 = 2;
-            try {
-                Trace.WriteLine( "Hello World !!!" );
-            } catch {
-            }
-            yield return v0;
-            yield return v1;
-            yield return v2;
+        private string Instance_Method() {
+            return "Value";
         }
 
 
