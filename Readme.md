@@ -1,5 +1,5 @@
 ﻿# Overview
-The package ***MakeTypesPublic*** is intended to access non-public types and members.
+The package **MakeTypesPublic** is intended to access non-public types and members.
 
 # How to use it
 Just add metadata `MakeTypesPublic="true"` to `ProjectReference` or `PackageReference` items.
