@@ -48,7 +48,7 @@
         private static void Save(string path, string content, TaskLoggingHelper log) {
             Directory.CreateDirectory( Path.GetDirectoryName( path ) );
             File.WriteAllText( path, content );
-            log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Output: {0}", path );
+            log.LogMessage( MessageImportance.High, "[MakeTypesPublic] New source code: {0}", path );
         }
 
 

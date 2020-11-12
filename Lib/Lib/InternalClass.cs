@@ -5,19 +5,19 @@
 
     internal class InternalClass {
 
-        private static class Static_NestedClass {
+        private static class NestedClass_Static {
         }
-        private class Instantiable_NestedClass {
+        private class NestedClass_Instantiable {
         }
 
         // Static
-        private static object Static_Field = "Value";
-        private static object Static_Property { get; set; } = "Value";
-        private static event Action Static_Event;
+        private static object Field_Static = "Value";
+        private static object Property_Static { get; set; } = "Value";
+        private static event Action Event_Static;
         // Instance
-        private object Instance_Field = "Value";
-        private object Instance_Property { get; set; } = "Value";
-        private event Action Instance_Event;
+        private object Field_Instance = "Value";
+        private object Property_Instance { get; set; } = "Value";
+        private event Action Event_Instance;
 
 
         // Constructor
@@ -28,10 +28,10 @@
 
 
         // Method
-        private static string Static_Method() {
+        private static string Method_Static() {
             return "Value";
         }
-        private string Instance_Method() {
+        private string Method_Instance() {
             return "Value";
         }
 

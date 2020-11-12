@@ -37,7 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="Readme.txt" Pack="true" PackagePath="/" />
+        <None Include="Readme.md" Pack="true" PackagePath="/" />
         <None Include="Icon.png" Pack="true" PackagePath="/" />
         <None Include="Build/**" Pack="true" PackagePath="/build" />
         <Content Include="Content/**" Pack="true" PackageCopyToOutput="true" PackageFlatten="false" />

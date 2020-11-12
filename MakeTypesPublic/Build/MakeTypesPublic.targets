@@ -35,7 +35,7 @@
     
     <!--Make assemblies-->
     <Target Name="MTP_MakeAssemblies" Condition="@(MTP_SourceReferences) != ''" Returns="@(MTP_NewReferences)">
-        <MakeAssemblyWithPublicTypesTask Reference="%(MTP_SourceReferences.Identity)" DirectoryToSave="$(MTP_AssembliesDirectory)" >
+        <MakeAssemblyWithPublicTypesTask Reference="@(MTP_SourceReferences)" DirectoryToSave="$(MTP_AssembliesDirectory)" Condition="%(MTP_SourceReferences.Identity) != ''" >
             <Output TaskParameter="Output" ItemName="MTP_NewReferences" />
         </MakeAssemblyWithPublicTypesTask>
     </Target>

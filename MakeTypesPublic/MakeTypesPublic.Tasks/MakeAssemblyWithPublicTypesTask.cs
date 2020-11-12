@@ -10,23 +10,23 @@
     public class MakeAssemblyWithPublicTypesTask : Task {
 
         [Required]
-        public string Reference { get; set; }
+        public ITaskItem Reference { get; set; }
         [Required]
         public string DirectoryToSave { get; set; }
 
         [Output]
-        public string Output { get; set; }
+        public ITaskItem Output { get; set; }
 
 
         public override bool Execute() {
             //var resolver = new AssemblyResolver( Path.GetDirectoryName( Reference ) );
             //var parameters = new ReaderParameters { AssemblyResolver = resolver };
-            var assembly = AssemblyDefinition.ReadAssembly( Reference );
+            var assembly = AssemblyDefinition.ReadAssembly( Reference.ItemSpec );
 
             AssemblyWithPublicTypesMaker.MakeTypesPublic( assembly, Log );
 
-            Output = Path.Combine( DirectoryToSave, Path.GetFileName( Reference ) );
-            Save( Output, assembly, Log );
+            Output = new TaskItem( Path.Combine( DirectoryToSave, Path.GetFileName( Reference.ItemSpec ) ), Reference.CloneCustomMetadata() );
+            Save( Output.ItemSpec, assembly, Log );
             return true;
         }
 
@@ -35,7 +35,7 @@
         private static void Save(string path, AssemblyDefinition assembly, TaskLoggingHelper log) {
             Directory.CreateDirectory( Path.GetDirectoryName( path ) );
             assembly.Write( path );
-            log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Output: {0}", path );
+            log.LogMessage( MessageImportance.High, "[MakeTypesPublic] New assembly: {0}", path );
         }
 
 

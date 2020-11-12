@@ -8,19 +8,19 @@
 
     public class PublicClass {
 
-        public static class Static_NestedClass {
+        public static class NestedClass_Static {
         }
-        public class Instantiable_NestedClass {
+        public class NestedClass_Instantiable {
         }
 
         // Static
-        public static object Static_Field = "Value";
-        public static object Static_Property { get; set; } = "Value";
-        public static event Action Static_Event;
+        public static object Field_Static = "Value";
+        public static object Property_Static { get; set; } = "Value";
+        public static event Action Event_Static;
         // Instance
-        public object Instance_Field = "Value";
-        public object Instance_Property { get; set; } = "Value";
-        public event Action Instance_Event;
+        public object Field_Instance = "Value";
+        public object Property_Instance { get; set; } = "Value";
+        public event Action Event_Instance;
 
 
         // Constructor
@@ -31,10 +31,10 @@
 
 
         // Method
-        public static string Static_Method() {
+        public static string Method_Static() {
             return "Value";
         }
-        public string Instance_Method() {
+        public string Method_Instance() {
             return "Value";
         }
 
