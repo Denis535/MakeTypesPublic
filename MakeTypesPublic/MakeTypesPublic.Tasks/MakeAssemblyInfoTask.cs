@@ -22,33 +22,38 @@
 }";
 
         [Required]
-        public string[] References { get; set; }
+        public ITaskItem[] References { get; set; }
         [Required]
         public string DirectoryToSave { get; set; }
 
         [Output]
-        public string Output { get; set; }
+        public ITaskItem Output { get; set; }
 
 
         public override bool Execute() {
-            var builder = new StringBuilder();
-            foreach (var item in References.Select( Path.GetFileNameWithoutExtension )) {
-                builder.AppendFormat( Usage_IgnoresAccessChecksToAttribute, item ).AppendLine();
-            }
-            builder.AppendLine();
-            builder.AppendLine( Declaration_IgnoresAccessChecksToAttribute );
-
-            Output = Path.Combine( DirectoryToSave, "AssemblyInfo.cs" );
-            Save( Output, builder.ToString(), Log );
+            var content = GetAssemblyInfoContent( References.Select( i => i.ItemSpec ).Select( Path.GetFileNameWithoutExtension ) );
+            Output = new TaskItem( Path.Combine( DirectoryToSave, "AssemblyInfo.cs" ) );
+            Save( Output.ItemSpec, content, Log );
             return true;
         }
 
 
         // Helpers
+        private static string GetAssemblyInfoContent(IEnumerable<string> assemblies) {
+            var builder = new StringBuilder();
+            foreach (var item in assemblies) {
+                builder.AppendFormat( Usage_IgnoresAccessChecksToAttribute, item ).AppendLine();
+            }
+            builder.AppendLine();
+            builder.AppendLine( Declaration_IgnoresAccessChecksToAttribute );
+            return builder.ToString();
+        }
         private static void Save(string path, string content, TaskLoggingHelper log) {
             Directory.CreateDirectory( Path.GetDirectoryName( path ) );
             File.WriteAllText( path, content );
+#if DEBUG
             log.LogMessage( MessageImportance.High, "[MakeTypesPublic] New source code: {0}", path );
+#endif
         }
 
 

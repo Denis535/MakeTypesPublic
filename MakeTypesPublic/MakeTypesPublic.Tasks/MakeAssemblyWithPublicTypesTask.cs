@@ -35,7 +35,9 @@
         private static void Save(string path, AssemblyDefinition assembly, TaskLoggingHelper log) {
             Directory.CreateDirectory( Path.GetDirectoryName( path ) );
             assembly.Write( path );
+#if DEBUG
             log.LogMessage( MessageImportance.High, "[MakeTypesPublic] New assembly: {0}", path );
+#endif
         }
 
 
