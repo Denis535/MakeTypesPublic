@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeTypesPublic.Tests", "Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib", "Lib\Lib.csproj", "{801C0C32-9FB8-4F0E-8C19-99431E8EA1CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib2", "Lib2\Lib2.csproj", "{6CF92372-EE1F-4E2A-9511-3117570AD995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib2", "Lib2\Lib2.csproj", "{6CF92372-EE1F-4E2A-9511-3117570AD995}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8499492-FB13-4616-9714-74D73C42FB00}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
