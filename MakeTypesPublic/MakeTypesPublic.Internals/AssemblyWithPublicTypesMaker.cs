@@ -2,12 +2,11 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
 
-    public static class AssemblyWithPublicTypesMaker {
+    internal static class AssemblyWithPublicTypesMaker {
 
 
         public static void MakeTypesPublic(AssemblyDefinition assembly, TaskLoggingHelper log) {

@@ -7,19 +7,10 @@
     using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
 
-    public class MakeAssemblyInfoTask : Task {
+    public class CreateAssemblyInfoTask : Task {
 
-        private const string Usage_IgnoresAccessChecksToAttribute =
+        private const string IgnoresAccessChecksToAttribute_Usage =
 "[assembly: System.Runtime.CompilerServices.IgnoresAccessChecksTo( \"{0}\" )]";
-
-        private const string Declaration_IgnoresAccessChecksToAttribute =
-@"namespace System.Runtime.CompilerServices {
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    internal sealed class IgnoresAccessChecksToAttribute : Attribute {
-        public IgnoresAccessChecksToAttribute(string assembly) {
-        }
-    }
-}";
 
         [Required]
         public ITaskItem[] References { get; set; }
@@ -42,10 +33,8 @@
         private static string GetAssemblyInfoContent(IEnumerable<string> assemblies) {
             var builder = new StringBuilder();
             foreach (var item in assemblies) {
-                builder.AppendFormat( Usage_IgnoresAccessChecksToAttribute, item ).AppendLine();
+                builder.AppendFormat( IgnoresAccessChecksToAttribute_Usage, item ).AppendLine();
             }
-            builder.AppendLine();
-            builder.AppendLine( Declaration_IgnoresAccessChecksToAttribute );
             return builder.ToString();
         }
         private static void Save(string path, string content, TaskLoggingHelper log) {

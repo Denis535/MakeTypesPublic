@@ -7,7 +7,7 @@
     using Microsoft.Build.Utilities;
     using Mono.Cecil;
 
-    public class MakeAssemblyWithPublicTypesTask : Task {
+    public class CreateFakeAssemblyTask : Task {
 
         [Required]
         public ITaskItem Reference { get; set; }

@@ -7,7 +7,7 @@
 //    using System.Text;
 //    using Mono.Cecil;
 
-//    public class AssemblyResolver : IAssemblyResolver {
+//    internal class AssemblyResolver : IAssemblyResolver {
 
 //        private string[] Directories { get; }
 

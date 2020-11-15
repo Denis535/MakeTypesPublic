@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <!--Properties-->
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
 
@@ -13,51 +14,69 @@
 
         <Icon>Icon.png</Icon>
         <Title>$(AssemblyName)</Title>
-        <Description>Allow access to non public types and members</Description>
+        <Description>Disable access checks to non-public types and members</Description>
         <Tags>MSBuild;MakeTypesPublic;IgnoresAccessChecksToAttribute;InternalsVisibleToAttribute;IgnoresAccessChecksToGenerator</Tags>
 
         <ProjectUrl>https://github.com/Denis535/MakeTypesPublic</ProjectUrl>
         <RepositoryUrl>https://github.com/Denis535/MakeTypesPublic</RepositoryUrl>
 
+        <EnableDefaultItems>true</EnableDefaultItems>
+        <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
+        <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+        <EnableDefaultEmbeddedResourceItems>true</EnableDefaultEmbeddedResourceItems>
+
         <IsTool>true</IsTool>
         <DevelopmentDependency>true</DevelopmentDependency>
+        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+
         <IncludeBuildOutput>true</IncludeBuildOutput>
         <IncludeContentInPack>true</IncludeContentInPack>
         <IncludeSymbols>false</IncludeSymbols>
         <IncludeSource>false</IncludeSource>
-        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
-        <BeforePack>$(BeforePack);BeforePack</BeforePack>
-        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeBuilds</TargetsForTfmSpecificBuildOutput>
+        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeContent</TargetsForTfmSpecificContentInPackage>
     </PropertyGroup>
 
+    <!--Items-->
+    <ItemGroup>
+        <Clean Include="$(PackageOutputPath)\*.nupkg" />
+    </ItemGroup>
+
+    <!--Files-->
+    <ItemGroup>
+        <Compile Remove="Content\System.Runtime.CompilerServices\IgnoresAccessChecksToAttribute.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Content\System.Runtime.CompilerServices\IgnoresAccessChecksToAttribute.cs" />
+    </ItemGroup>
+
+    <!--References-->
     <ItemGroup>
         <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" />
         <PackageReference Include="Mono.Cecil" Version="0.11.3" GeneratePathProperty="true" />
     </ItemGroup>
 
-    <ItemGroup>
-        <None Include="../Readme.md" Pack="true" PackagePath="/" />
-        <None Include="Icon.png" Pack="true" PackagePath="/" />
-        <None Include="Build/**" Pack="true" PackagePath="/build" />
-        <Content Include="Content/**" Pack="true" PackageCopyToOutput="true" PackageFlatten="false" />
-    </ItemGroup>
-
-    <Target Name="BeforePack">
-        <ItemGroup>
-            <FilesToDelete Include="$(MSBuildProjectDirectory)\$(PackageOutputPath)*.nupkg" />
-        </ItemGroup>
-        <Delete Files="@(FilesToDelete)" />
-    </Target>
-
-    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <!--Include builds-->
+    <Target Name="IncludeBuilds">
         <ItemGroup>
             <BuildOutputInPackage Include="$(PkgMono_Cecil)\lib\netstandard2.0\*.*" />
         </ItemGroup>
     </Target>
 
+    <!--Include content-->
+    <Target Name="IncludeContent">
+        <ItemGroup>
+            <TfmSpecificPackageFile Include="../Readme.md" PackagePath="/" />
+            <TfmSpecificPackageFile Include="../Icon.png" PackagePath="/" />
+            <TfmSpecificPackageFile Include="Content/**/*.cs" PackagePath="contentFiles/cs/any" BuildAction="Compile" />
+            <TfmSpecificPackageFile Include="Build/**" PackagePath="/build" />
+        </ItemGroup>
+    </Target>
+
+    <!--Push to local repository-->
     <Target Name="Push" AfterTargets="Pack">
-        <Exec Command="dotnet nuget push $(PackageOutputPath)*.nupkg --source Local" />
+        <Exec Command="dotnet nuget push $(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg --source Local" />
     </Target>
 
 </Project>
