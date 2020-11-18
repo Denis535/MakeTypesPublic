@@ -1,8 +1,8 @@
 ﻿# Overview
-The package **MakeTypesPublic** is intended to allow access non-public types and members.
+The package **MakeTypesPublic** is intended to disable access checks to non-public (private, internal) types and members.
 
 # How to use it
-Just add metadata `MakeTypesPublic="true"` to `ProjectReference` or `PackageReference` items.
+You should just add metadata `IgnoreAccessChecks="true"` to `ProjectReference` or `PackageReference` items.
 
 # How it works
 There are a few types of access checks:

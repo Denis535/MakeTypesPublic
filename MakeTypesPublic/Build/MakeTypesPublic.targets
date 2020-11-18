@@ -1,61 +1,78 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-    <PropertyGroup>
-        <MTP_AssembliesDirectory>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\</MTP_AssembliesDirectory>
-        <MTP_SourcesDirectory>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)\MakeTypesPublic\Sources\</MTP_SourcesDirectory>
-    </PropertyGroup>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="MTP_CheckPackage">
 
     <UsingTask TaskName="MakeTypesPublic.Tasks.CheckPackageTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
-    <UsingTask TaskName="MakeTypesPublic.Tasks.CreateFakeAssemblyTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
-    <UsingTask TaskName="MakeTypesPublic.Tasks.CreateAssemblyInfoTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
+    <UsingTask TaskName="MakeTypesPublic.Tasks.CreateFakeAssembliesTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
 
     <!--Check package-->
     <Target Name="MTP_CheckPackage">
         <CheckPackageTask MSBuildThisFileFullPath="$(MSBuildThisFileFullPath)" />
     </Target>
 
-    <!--Find source references-->
-    <Target Name="MTP_FindSourceReferences" DependsOnTargets="MTP_FindSourceReferences_1;MTP_FindSourceReferences_2" Returns="@(MTP_SourceReferences)" />
-    <!--Find source references-->
-    <Target Name="MTP_FindSourceReferences_1" Returns="@(MTP_SourceReferences)">
+    <!--Get source references-->
+    <Target
+        Name="MTP_GetSourceReferences"
+        Returns="@(MTP_SourceReferences)"
+        DependsOnTargets="MTP_GetSourceReferences_1;MTP_GetSourceReferences_2"
+        AfterTargets="AfterResolveReferences">
+    </Target>
+    <!--Get source references 1-->
+    <Target
+        Name="MTP_GetSourceReferences_1"
+        Returns="@(MTP_SourceReferences)">
         <ItemGroup>
-            <MTP_SourceReferences Include="@(ReferencePath -> WithMetadataValue( 'MakeTypesPublic', 'true' ))" />
+            <MTP_SourceReferences Include="@(ReferencePath -> WithMetadataValue( 'IgnoreAccessChecks', 'true' ))" />
         </ItemGroup>
     </Target>
-    <!--Find source references-->
-    <Target Name="MTP_FindSourceReferences_2" Outputs="%(PackageReference.Identity)" Returns="@(MTP_SourceReferences)">
+    <!--Get source references 2-->
+    <Target
+        Name="MTP_GetSourceReferences_2"
+        Outputs="%(PackageReference.Identity)"
+        Returns="@(MTP_SourceReferences)">
         <PropertyGroup>
             <Local_NuGetPackageId>%(PackageReference.Identity)</Local_NuGetPackageId>
-            <Local_MakeTypesPublic>%(PackageReference.MakeTypesPublic)</Local_MakeTypesPublic>
+            <Local_IgnoreAccessChecks>%(PackageReference.IgnoreAccessChecks)</Local_IgnoreAccessChecks>
         </PropertyGroup>
-        <ItemGroup Condition="$(Local_MakeTypesPublic) == 'true'">
+        <ItemGroup Condition="$(Local_IgnoreAccessChecks) == 'true'">
             <MTP_SourceReferences Include="@(ReferencePath -> WithMetadataValue( 'NuGetPackageId', $(Local_NuGetPackageId) ))" />
         </ItemGroup>
     </Target>
-    
-    <!--Create assemblies-->
-    <Target Name="MTP_CreateAssemblies" Condition="@(MTP_SourceReferences) != ''" Returns="@(MTP_NewReferences)">
-        <CreateFakeAssemblyTask Reference="@(MTP_SourceReferences)" DirectoryToSave="$(MTP_AssembliesDirectory)" Condition="%(MTP_SourceReferences.Identity) != ''" >
-            <Output TaskParameter="Output" ItemName="MTP_NewAssemblies" />
-        </CreateFakeAssemblyTask>
-    </Target>
 
-    <!--Create sources-->
-    <Target Name="MTP_CreateSources" Condition="@(MTP_SourceReferences) != ''" Returns="@(MTP_NewSources)">
-        <CreateAssemblyInfoTask References="@(MTP_SourceReferences)" DirectoryToSave="$(MTP_SourcesDirectory)" >
-            <Output TaskParameter="Output" PropertyName="MTP_NewSources" />
-        </CreateAssemblyInfoTask>
-    </Target>
-
-    <!--MakeTypesPublic-->
+    <!--Get new references-->
     <Target
-        Name="MTP_MakeTypesPublic"
-        DependsOnTargets="MTP_CheckPackage; MTP_FindSourceReferences; MTP_CreateAssemblies; MTP_CreateSources"
-        BeforeTargets="FindReferenceAssembliesForReferences">
+        Name="MTP_GetNewReferences"
+        Returns="@(MTP_NewReferences)"
+        AfterTargets="AfterResolveReferences">
+        <ItemGroup>
+            <MTP_NewReferences Include="@(MTP_SourceReferences -> '$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\%(Filename)%(Extension)')" />
+        </ItemGroup>
+    </Target>
+
+    <!--Get assembly attributes-->
+    <Target
+        Name="MTP_GetAssemblyAttributes"
+        Returns="@(AssemblyAttribute)"
+        AfterTargets="AfterResolveReferences">
+        <ItemGroup>
+            <AssemblyAttribute Include="System.Runtime.CompilerServices.IgnoresAccessChecksToAttribute" Condition="@(MTP_SourceReferences) != ''">
+                <_Parameter1>%(MTP_SourceReferences.Filename)</_Parameter1>
+            </AssemblyAttribute>
+        </ItemGroup>
+    </Target>
+
+    <!--Create fake assemblies-->
+    <Target
+        Name="MTP_CreateFakeAssemblies"
+        AfterTargets="AfterResolveReferences">
+        <CreateFakeAssembliesTask SourceReferences="@(MTP_SourceReferences)" NewReferences="@(MTP_NewReferences)" />
+    </Target>
+
+    <!--Set new references-->
+    <Target
+        Name="MTP_SetNewReferences"
+        AfterTargets="AfterResolveReferences">
         <ItemGroup>
             <ReferencePath Remove="@(MTP_SourceReferences)" />
-            <ReferencePath Include="@(MTP_NewAssemblies)" />
-            <Compile Include="$(MTP_NewSources)" />
+            <ReferencePath Include="@(MTP_NewReferences)" />
         </ItemGroup>
     </Target>
 

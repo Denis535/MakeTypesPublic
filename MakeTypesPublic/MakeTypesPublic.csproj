@@ -15,7 +15,7 @@
         <Icon>Icon.png</Icon>
         <Title>$(AssemblyName)</Title>
         <Description>Disable access checks to non-public types and members</Description>
-        <Tags>MSBuild;MakeTypesPublic;IgnoresAccessChecksToAttribute;InternalsVisibleToAttribute;IgnoresAccessChecksToGenerator</Tags>
+        <Tags>MSBuild;AccessChecks;DisableAccessChecks;IgnoreAccessChecks;IgnoresAccessChecksToAttribute;InternalsVisibleToAttribute</Tags>
 
         <ProjectUrl>https://github.com/Denis535/MakeTypesPublic</ProjectUrl>
         <RepositoryUrl>https://github.com/Denis535/MakeTypesPublic</RepositoryUrl>
