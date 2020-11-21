@@ -7,7 +7,7 @@
     using Microsoft.Build.Utilities;
     using Mono.Cecil;
 
-    public class CreateFakeAssembliesTask : Task {
+    public class MTP_CreateFakeAssembliesTask : Task {
 
         [Required]
         public string[] SourceReferences { get; set; }
@@ -17,7 +17,7 @@
 
         public override bool Execute() {
             if (SourceReferences.Length != NewReferences.Length) {
-                Log.LogError( "Sizes of SourceReferences and NewReferences are not equal" );
+                Log.LogError( "Sizes of 'SourceReferences' and 'NewReferences' are not equal" );
                 return false;
             }
             for (var i = 0; i < SourceReferences.Length; i++) {

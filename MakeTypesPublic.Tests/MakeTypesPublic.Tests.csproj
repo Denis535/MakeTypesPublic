@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <IsPackable>false</IsPackable>
+        <!--<MTP_IsEnabled>true</MTP_IsEnabled>-->
     </PropertyGroup>
 
     <ItemGroup>

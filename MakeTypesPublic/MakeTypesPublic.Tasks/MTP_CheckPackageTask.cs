@@ -6,7 +6,7 @@
     using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
 
-    public class CheckPackageTask : Task {
+    public class MTP_CheckPackageTask : Task {
 
         [Required]
         public string MSBuildThisFileFullPath { get; set; }
