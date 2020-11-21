@@ -4,17 +4,24 @@
     <UsingTask TaskName="MakeTypesPublic.Tasks.MTP_CreateFakeAssembliesTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MakeTypesPublic.dll" />
 
     <!--Check package-->
-    <Target Name="MTP_CheckPackage">
+    <Target 
+        Name="MTP_CheckPackage">
         <MTP_CheckPackageTask MSBuildThisFileFullPath="$(MSBuildThisFileFullPath)" />
+    </Target>
+
+    <!--Execute-->
+    <Target
+        Name="MTP_Execute"
+        DependsOnTargets="MTP_GetSourceReferences;MTP_GetNewReferences;MTP_CreateFakeAssemblies;MTP_AddNewReferences;MTP_AddAssemblyAttributes"
+        AfterTargets="ResolveReferences"
+        Condition="$(IgnoreAccessChecks) == 'true'">
     </Target>
 
     <!--Get source references-->
     <Target
         Name="MTP_GetSourceReferences"
         Returns="@(MTP_SourceReferences)"
-        DependsOnTargets="MTP_GetSourceReferences_1;MTP_GetSourceReferences_2"
-        AfterTargets="AfterResolveReferences"
-        Condition="$(MTP_IsEnabled) == 'true'">
+        DependsOnTargets="MTP_GetSourceReferences_1;MTP_GetSourceReferences_2">
     </Target>
     <!--Get source references 1-->
     <Target
@@ -41,9 +48,7 @@
     <!--Get new references-->
     <Target
         Name="MTP_GetNewReferences"
-        Returns="@(MTP_NewReferences)"
-        AfterTargets="AfterResolveReferences"
-        Condition="$(MTP_IsEnabled) == 'true'">
+        Returns="@(MTP_NewReferences)">
         <ItemGroup>
             <MTP_NewReferences Include="@(MTP_SourceReferences -> '$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\%(Filename)%(Extension)')" />
         </ItemGroup>
@@ -51,17 +56,13 @@
 
     <!--Create fake assemblies-->
     <Target
-        Name="MTP_CreateFakeAssemblies"
-        AfterTargets="AfterResolveReferences"
-        Condition="$(MTP_IsEnabled) == 'true'">
+        Name="MTP_CreateFakeAssemblies">
         <MTP_CreateFakeAssembliesTask SourceReferences="@(MTP_SourceReferences)" NewReferences="@(MTP_NewReferences)" />
     </Target>
 
     <!--Add new references-->
     <Target
-        Name="MTP_AddNewReferences"
-        AfterTargets="AfterResolveReferences"
-        Condition="$(MTP_IsEnabled) == 'true'">
+        Name="MTP_AddNewReferences">
         <ItemGroup>
             <ReferencePath Remove="@(MTP_SourceReferences)" />
             <ReferencePath Include="@(MTP_NewReferences)" />
@@ -70,9 +71,7 @@
 
     <!--Add assembly attributes-->
     <Target
-        Name="MTP_AddAssemblyAttributes"
-        AfterTargets="AfterResolveReferences"
-        Condition="$(MTP_IsEnabled) == 'true'">
+        Name="MTP_AddAssemblyAttributes">
         <ItemGroup>
             <AssemblyAttribute Include="System.Runtime.CompilerServices.IgnoresAccessChecksToAttribute" Condition="@(MTP_SourceReferences) != ''">
                 <_Parameter1>%(MTP_SourceReferences.Filename)</_Parameter1>

@@ -2,7 +2,8 @@
 The package **MakeTypesPublic** is intended to disable access checks to non-public (private, internal) types and members.
 
 # How to use it
-You should just add metadata `IgnoreAccessChecks="true"` to `ProjectReference` or `PackageReference` items.
+You need just add metadata `IgnoreAccessChecks="true"` to `ProjectReference` or `PackageReference` items.
+You can also set `IgnoreAccessChecks` property to true/false if you want to enable/disable it. By default it's enabled only for not design-time builds. So, Visual Studio will show errors but compiler and runtime will work.
 
 # How it works
 There are a few types of access checks:
@@ -16,4 +17,4 @@ To learn more see the following links:
 - Design-time access checks. There is a problem here. 
 You could feed Visual Studio the fake assemblies with public types. But this can lead to some problems. So I preferred just ignore those errors. 
 Maybe there are other ways to suppress these errors? But I don't know them.
-If you still want to feed Visual Studio the fake assemblies you can set property "MTP_IsEnabled" to true. By default this property is true only for not design-time builds.
+If you still want to feed Visual Studio the fake assemblies you can set `IgnoreAccessChecks` property to true. By default this property is true only for not design-time builds.

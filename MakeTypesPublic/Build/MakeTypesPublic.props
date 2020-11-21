@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     
     <PropertyGroup>
-        <MTP_IsEnabled Condition="$(DesignTimeBuild) != 'true'">true</MTP_IsEnabled>
+        <IgnoreAccessChecks Condition="$(DesignTimeBuild) != 'true'">true</IgnoreAccessChecks>
     </PropertyGroup>
     
 </Project>
