@@ -1,4 +1,5 @@
-﻿namespace MakeTypesPublic.Tasks {
+﻿// Note: Very often Visual Studio loads the assembly from old package. You should reload Visual Studio in this case.
+namespace MakeTypesPublic.Tasks {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
@@ -17,7 +18,7 @@
         public override bool Execute() {
             if (!MSBuildThisFileFullPath.Contains( "\\" + AssemblyVersion + "\\" )) {
                 Log.LogError( "Package 'MakeTypesPublic' is loaded incorrectly" );
-                Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Error: Package is loaded incorrectly" );
+                Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Error: Package 'MakeTypesPublic' is loaded incorrectly" );
                 Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] MSBuildThisFileFullPath: {0}", MSBuildThisFileFullPath );
                 Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] AssemblyVersion: {0}", AssemblyVersion );
             }

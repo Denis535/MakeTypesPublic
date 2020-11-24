@@ -12,7 +12,7 @@
     <!--Execute-->
     <Target
         Name="MTP_Execute"
-        DependsOnTargets="MTP_GetSourceReferences;MTP_GetNewReferences;MTP_CreateFakeAssemblies;MTP_AddNewReferences;MTP_AddAssemblyAttributes"
+        DependsOnTargets="MTP_GetSourceReferences;MTP_GetFakeReferences;MTP_CreateFakeAssemblies;MTP_AddFakeReferences;MTP_AddAssemblyAttributes"
         AfterTargets="ResolveReferences"
         Condition="$(IgnoreAccessChecks) == 'true'">
     </Target>
@@ -45,27 +45,27 @@
         </ItemGroup>
     </Target>
 
-    <!--Get new references-->
+    <!--Get fake references-->
     <Target
-        Name="MTP_GetNewReferences"
-        Returns="@(MTP_NewReferences)">
+        Name="MTP_GetFakeReferences"
+        Returns="@(MTP_FakeReferences)">
         <ItemGroup>
-            <MTP_NewReferences Include="@(MTP_SourceReferences -> '$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\%(Filename)%(Extension)')" />
+            <MTP_FakeReferences Include="@(MTP_SourceReferences -> '$(BaseIntermediateOutputPath)\MakeTypesPublic\Assemblies\%(Filename)%(Extension)')" />
         </ItemGroup>
     </Target>
 
     <!--Create fake assemblies-->
     <Target
         Name="MTP_CreateFakeAssemblies">
-        <MTP_CreateFakeAssembliesTask SourceReferences="@(MTP_SourceReferences)" NewReferences="@(MTP_NewReferences)" />
+        <MTP_CreateFakeAssembliesTask SourceReferences="@(MTP_SourceReferences)" FakeReferences="@(MTP_FakeReferences)" />
     </Target>
 
-    <!--Add new references-->
+    <!--Add fake references-->
     <Target
-        Name="MTP_AddNewReferences">
+        Name="MTP_AddFakeReferences">
         <ItemGroup>
             <ReferencePath Remove="@(MTP_SourceReferences)" />
-            <ReferencePath Include="@(MTP_NewReferences)" />
+            <ReferencePath Include="@(MTP_FakeReferences)" />
         </ItemGroup>
     </Target>
 

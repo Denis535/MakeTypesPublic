@@ -12,16 +12,16 @@
         [Required]
         public string[] SourceReferences { get; set; }
         [Required]
-        public string[] NewReferences { get; set; }
+        public string[] FakeReferences { get; set; }
 
 
         public override bool Execute() {
-            if (SourceReferences.Length != NewReferences.Length) {
-                Log.LogError( "Sizes of 'SourceReferences' and 'NewReferences' are not equal" );
+            if (SourceReferences.Length != FakeReferences.Length) {
+                Log.LogError( "Sizes of 'SourceReferences' and 'FakeReferences' are not equal" );
                 return false;
             }
             for (var i = 0; i < SourceReferences.Length; i++) {
-                CreateFakeAssembly( SourceReferences[ i ], NewReferences[ i ], Log );
+                CreateFakeAssembly( SourceReferences[ i ], FakeReferences[ i ], Log );
             }
             return true;
         }
