@@ -1,8 +1,10 @@
 namespace MakeTypesPublic.Tests {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using NUnit.Framework;
     using Lib;
+    using Lib2;
 
     public class Tests {
 
@@ -50,6 +52,22 @@ namespace MakeTypesPublic.Tests {
             Assert.That( new InternalClass().Property_Instance, Is.EqualTo( "Value" ) );
             //Assert.That( new InternalClass().Event_Instance, Is.Null );
             Assert.That( new InternalClass().Method_Instance(), Is.EqualTo( "Value" ) );
+        }
+
+
+        // ExampleClass
+        [Test]
+        public void Test_02_ExampleClass() {
+            Assert.That( ExampleClass.Example_GetValue(), Is.EqualTo( "Value" ) );
+            Assert.That( ExampleClass.Example_GetValues().Single(), Is.EqualTo( "Value" ) );
+
+            Assert.That( ExampleClass.Example_GetValueAsync().Result, Is.EqualTo( "Value" ) );
+            Assert.That( ExampleClass.Example_GetValuesAsync().SingleAsync().Result, Is.EqualTo( "Value" ) );
+
+            ExampleClass.Example_Declaration_Arguments( new HelloWorldClass() );
+            ExampleClass.Example_Declaration_Result();
+            ExampleClass.Example_Body_LocalVariables();
+            ExampleClass.Example_Body_HandleException();
         }
 
 

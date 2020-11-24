@@ -1,10 +1,7 @@
 ﻿namespace Lib {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Text;
-    using System.Threading.Tasks;
-    using Lib2;
 
     public class PublicClass {
 
@@ -23,45 +20,19 @@
         public event Action Event_Instance;
 
 
-        // Constructor
+        // Constructors
         static PublicClass() {
         }
         public PublicClass() {
         }
 
 
-        // Method
+        // Methods
         public static string Method_Static() {
             return "Value";
         }
         public string Method_Instance() {
             return "Value";
-        }
-
-
-        // Examples
-        internal static void Example() {
-            try {
-                //var message = "Hello World !!!";
-                var message = new HelloWorldClass().ToString();
-                Trace.WriteLine( message );
-            } catch (Exception ex) {
-                Trace.WriteLine( ex );
-            }
-        }
-        internal static string Example_GetValue() {
-            return "Value";
-        }
-        internal static async Task<string> Example_GetValueAsync() {
-            await Task.Yield();
-            return "Value";
-        }
-        internal static IEnumerable<string> Example_GetValues() {
-            yield return "Value";
-        }
-        internal static async IAsyncEnumerable<string> Example_GetValuesAsync() {
-            await Task.Yield();
-            yield return "Value";
         }
 
 
