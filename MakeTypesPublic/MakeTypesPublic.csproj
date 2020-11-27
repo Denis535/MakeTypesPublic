@@ -4,31 +4,38 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
 
-        <Id>MakeTypesPublic</Id>
+        <!--See Microsoft.NET.GenerateAssemblyInfo.targets-->
+        <Title>$(AssemblyName)</Title>
         <VersionPrefix>1.0.0</VersionPrefix>
-        <VersionSuffix>alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
-        <VersionSuffix></VersionSuffix>
-
+        <VersionSuffix Condition="false">alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
+        <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+        <Version Condition=" '$(Version)' == '' ">$(VersionPrefix)</Version>
+        <Description>Package disables access checks to non-public types and members.</Description>
         <Authors>Denis535</Authors>
         <Company>Denis535</Company>
         <Product>$(AssemblyName)</Product>
-
-        <Icon>Icon.png</Icon>
-        <Title>$(AssemblyName)</Title>
-        <Description>Disable access checks to non-public types and members</Description>
-        <Tags>MSBuild;AccessChecks;DisableAccessChecks;IgnoreAccessChecks;IgnoresAccessChecksToAttribute;InternalsVisibleToAttribute</Tags>
-
-        <ProjectUrl>https://github.com/Denis535/MakeTypesPublic</ProjectUrl>
+        <Copyright></Copyright>
         <RepositoryUrl>https://github.com/Denis535/MakeTypesPublic</RepositoryUrl>
+
+        <!--See NuGet.Build.Tasks.Pack.targets-->
+        <PackageId>$(AssemblyName)</PackageId>
+        <PackageVersion>$(Version)</PackageVersion>
+        <PackageIcon>Icon.png</PackageIcon>
+        <PackageIconUrl></PackageIconUrl>
+        <PackageDescription>$(Description)</PackageDescription>
+        <PackageTags>MSBuild;AccessChecks;DisableAccessChecks;IgnoreAccessChecks;IgnoresAccessChecksToAttribute;InternalsVisibleToAttribute</PackageTags>
+        <PackageProjectUrl>https://github.com/Denis535/MakeTypesPublic</PackageProjectUrl>
+        <PackageLicenseFile></PackageLicenseFile>
+        <PackageLicenseUrl></PackageLicenseUrl>
+
+        <IsTool>true</IsTool>
+        <DevelopmentDependency>true</DevelopmentDependency>
+        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
         <EnableDefaultItems>true</EnableDefaultItems>
         <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
         <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
         <EnableDefaultEmbeddedResourceItems>true</EnableDefaultEmbeddedResourceItems>
-
-        <IsTool>true</IsTool>
-        <DevelopmentDependency>true</DevelopmentDependency>
-        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
         <IncludeBuildOutput>true</IncludeBuildOutput>
         <IncludeContentInPack>true</IncludeContentInPack>
