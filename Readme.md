@@ -19,3 +19,9 @@ To learn more see the following links:
 You could make Visual Studio to consume the fake assemblies. But this can lead to some problems. So I preferred just ignore those errors. 
 Maybe there are other ways to suppress these errors? But I don't know them.
 If you still want to make Visual Studio to consume the fake assemblies you can set `IgnoreAccessChecks` property to true. By default this property is true only for not design-time builds.
+
+# Github
+https://github.com/Denis535/MakeTypesPublic
+
+# NuGet
+https://www.nuget.org/packages/MakeTypesPublic
