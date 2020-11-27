@@ -7,6 +7,7 @@
         <Id>MakeTypesPublic</Id>
         <VersionPrefix>1.0.0</VersionPrefix>
         <VersionSuffix>alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
+        <VersionSuffix></VersionSuffix>
 
         <Authors>Denis535</Authors>
         <Company>Denis535</Company>
