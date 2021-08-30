@@ -1,5 +1,4 @@
-﻿// Note: Very often Visual Studio loads the assembly from old package. You should reload Visual Studio in this case.
-namespace MakeTypesPublic.Tasks {
+﻿namespace MakeTypesPublic.Tasks {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
@@ -10,19 +9,24 @@ namespace MakeTypesPublic.Tasks {
     public class MTP_CheckPackageTask : Task {
 
         [Required]
-        public string MSBuildThisFileFullPath { get; set; }
-
-        private string AssemblyVersion => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        public string MSBuildThisFileFullPath { get; set; } = default!;
 
 
         public override bool Execute() {
-            if (!MSBuildThisFileFullPath.Contains( "\\" + AssemblyVersion + "\\" )) {
+            // Note: Very often Visual Studio loads the assembly from old package. You should reload Visual Studio in this case.
+            if (!MSBuildThisFileFullPath.Contains( "\\" + GetAssemblyVersion() + "\\" )) {
                 Log.LogError( "Package 'MakeTypesPublic' is loaded incorrectly" );
                 Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Error: Package 'MakeTypesPublic' is loaded incorrectly" );
                 Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] MSBuildThisFileFullPath: {0}", MSBuildThisFileFullPath );
-                Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] AssemblyVersion: {0}", AssemblyVersion );
+                Log.LogMessage( MessageImportance.High, "[MakeTypesPublic] AssemblyVersion: {0}", GetAssemblyVersion() );
             }
             return true;
+        }
+
+
+        // Helpers
+        private string GetAssemblyVersion() {
+            return Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion!;
         }
 
 

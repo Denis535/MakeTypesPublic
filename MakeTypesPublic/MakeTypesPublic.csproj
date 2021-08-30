@@ -1,38 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <!--Properties-->
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
 
-        <!--See Microsoft.NET.GenerateAssemblyInfo.targets-->
-        <Title>$(AssemblyName)</Title>
-        <VersionPrefix>1.0.1</VersionPrefix>
+        <!--Assembly attributes-->
+        <VersionPrefix>1.0.2</VersionPrefix>
         <VersionSuffix Condition="false">alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
-        <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
-        <Version Condition=" '$(Version)' == '' ">$(VersionPrefix)</Version>
-        <Description>Package disables access checks to non-public types and members.</Description>
+        <Description>MSBuild extension 'MakeTypesPublic' is intended to disable access checks to non-public types and its members.</Description>
         <Authors>Denis535</Authors>
         <Company>Denis535</Company>
         <Product>$(AssemblyName)</Product>
         <Copyright></Copyright>
         <RepositoryUrl>https://github.com/Denis535/MakeTypesPublic</RepositoryUrl>
 
-        <!--See NuGet.Build.Tasks.Pack.targets-->
+        <!--Nuget package attributes-->
+        <Title>$(AssemblyName)</Title>
         <IsPackable>true</IsPackable>
         <PackageId>$(AssemblyName)</PackageId>
         <PackageVersion>$(Version)</PackageVersion>
         <PackageIcon>Icon.png</PackageIcon>
         <PackageIconUrl></PackageIconUrl>
         <PackageDescription>$(Description)</PackageDescription>
-        <PackageTags>MSBuild; IgnoresAccessChecksToAttribute; InternalsVisibleToAttribute; AccessChecks; AccessChecksTo; DisableAccessChecks; DisableAccessChecksTo; IgnoreAccessChecks; IgnoreAccessChecksTo</PackageTags>
+        <PackageTags>IgnoresAccessChecksToAttribute; InternalsVisibleToAttribute; AccessChecks; DisableAccessChecksTo; IgnoreAccessChecksTo, Weaver</PackageTags>
         <PackageProjectUrl>https://github.com/Denis535/MakeTypesPublic</PackageProjectUrl>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseUrl></PackageLicenseUrl>
-
         <IsTool>true</IsTool>
         <DevelopmentDependency>true</DevelopmentDependency>
         <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
+        <!--Nuget options-->
         <EnableDefaultItems>true</EnableDefaultItems>
         <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
         <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
@@ -47,24 +44,29 @@
         <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeContent</TargetsForTfmSpecificContentInPackage>
     </PropertyGroup>
 
-    <!--Items-->
+    <!--References-->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.11.0" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.4" GeneratePathProperty="true" />
+    </ItemGroup>
+
+    <!--Content-->
+    <ItemGroup>
+        <Compile Remove="Content\**\*.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Content\**\*.cs" />
+    </ItemGroup>
+
+    <!--Clean-->
     <ItemGroup>
         <Clean Include="$(PackageOutputPath)\*.nupkg" />
     </ItemGroup>
 
-    <!--Files-->
-    <ItemGroup>
-        <Compile Remove="Content\System.Runtime.CompilerServices\IgnoresAccessChecksToAttribute.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="Content\System.Runtime.CompilerServices\IgnoresAccessChecksToAttribute.cs" />
-    </ItemGroup>
-
-    <!--References-->
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.7.0" />
-        <PackageReference Include="Mono.Cecil" Version="0.11.3" GeneratePathProperty="true" />
-    </ItemGroup>
+    <!--Push to local repository-->
+    <Target Name="Push" AfterTargets="Pack">
+        <Exec Command="dotnet nuget push $(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg --source Local" />
+    </Target>
 
     <!--Include builds-->
     <Target Name="IncludeBuilds">
@@ -81,11 +83,6 @@
             <TfmSpecificPackageFile Include="Content/**/*.cs" PackagePath="contentFiles/cs/any" BuildAction="Compile" />
             <TfmSpecificPackageFile Include="Build/**" PackagePath="/build" />
         </ItemGroup>
-    </Target>
-
-    <!--Push to local repository-->
-    <Target Name="Push" AfterTargets="Pack">
-        <Exec Command="dotnet nuget push $(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg --source Local" />
     </Target>
 
 </Project>

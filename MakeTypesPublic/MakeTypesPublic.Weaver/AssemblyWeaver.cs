@@ -1,4 +1,4 @@
-﻿namespace MakeTypesPublic {
+﻿namespace MakeTypesPublic.Weaver {
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -7,31 +7,26 @@
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
 
-    internal static class AssemblyWithPublicTypesMaker {
+    internal static class AssemblyWeaver {
 
 
-        public static void MakeTypesPublic(AssemblyDefinition assembly, TaskLoggingHelper log) {
+        public static void Weav(AssemblyDefinition assembly, TaskLoggingHelper log) {
             //log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Assembly: {0}", assembly.FullName );
             foreach (var module in assembly.Modules) {
                 foreach (var type in module.GetAllTypes().Where( CanBePublic )) {
-                    //log.LogMessage( MessageImportance.High, "[MakeTypesPublic] Type: {0}", type.FullName );
                     MakePublic( type );
 
-                    foreach (var item in type.Fields.Where( CanBePublic )) {
-                        //log.LogMessage( MessageImportance.High, "[MakeTypesPublic]  Field: {0}", item.Name );
-                        MakePublic( item );
+                    foreach (var field in type.Fields.Where( CanBePublic )) {
+                        MakePublic( field );
                     }
-                    foreach (var item in type.Properties.Where( CanBePublic )) {
-                        //log.LogMessage( MessageImportance.High, "[MakeTypesPublic]  Property: {0}", item.Name );
-                        MakePublic( item );
+                    foreach (var property in type.Properties.Where( CanBePublic )) {
+                        MakePublic( property );
                     }
-                    foreach (var item in type.Events.Where( CanBePublic )) {
-                        //log.LogMessage( MessageImportance.High, "[MakeTypesPublic]  Event: {0}", item.Name );
-                        MakePublic( item );
+                    foreach (var @event in type.Events.Where( CanBePublic )) {
+                        MakePublic( @event );
                     }
-                    foreach (var item in type.Methods.Where( CanBePublic )) {
-                        //log.LogMessage( MessageImportance.High, "[MakeTypesPublic]  Method: {0}", item.Name );
-                        MakePublic( item );
+                    foreach (var method in type.Methods.Where( CanBePublic )) {
+                        MakePublic( method );
                     }
                 }
             }

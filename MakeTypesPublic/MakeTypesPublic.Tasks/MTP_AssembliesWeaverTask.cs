@@ -3,36 +3,33 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using MakeTypesPublic.Weaver;
     using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
     using Mono.Cecil;
-
-    public class MTP_CreateFakeAssembliesTask : Task {
+    
+    public class MTP_AssembliesWeaverTask : Task {
 
         [Required]
-        public string[] SourceReferences { get; set; }
+        public string[] SourceReferences { get; set; } = default!;
         [Required]
-        public string[] FakeReferences { get; set; }
+        public string[] TargetReferences { get; set; } = default!;
 
 
         public override bool Execute() {
-            if (SourceReferences.Length != FakeReferences.Length) {
-                Log.LogError( "Sizes of 'SourceReferences' and 'FakeReferences' are not equal" );
-                return false;
-            }
             for (var i = 0; i < SourceReferences.Length; i++) {
-                CreateFakeAssembly( SourceReferences[ i ], FakeReferences[ i ], Log );
+                Weav( SourceReferences[ i ], TargetReferences[ i ], Log );
             }
             return true;
         }
 
 
         // Helpers
-        private static void CreateFakeAssembly(string sourcePath, string targetPath, TaskLoggingHelper log) {
+        private static void Weav(string sourcePath, string targetPath, TaskLoggingHelper log) {
             //var resolver = new AssemblyResolver( Path.GetDirectoryName( sourcePath ) );
             //var parameters = new ReaderParameters { AssemblyResolver = resolver };
             var assembly = AssemblyDefinition.ReadAssembly( sourcePath );
-            AssemblyWithPublicTypesMaker.MakeTypesPublic( assembly, log );
+            AssemblyWeaver.Weav( assembly, log );
             Save( targetPath, assembly, log );
         }
         private static void Save(string path, AssemblyDefinition assembly, TaskLoggingHelper log) {

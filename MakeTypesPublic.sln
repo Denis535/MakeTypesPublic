@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeTypesPublic.Tests", "Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib", "Lib\Lib.csproj", "{801C0C32-9FB8-4F0E-8C19-99431E8EA1CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lib2", "Lib2\Lib2.csproj", "{6CF92372-EE1F-4E2A-9511-3117570AD995}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8499492-FB13-4616-9714-74D73C42FB00}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
@@ -37,10 +35,6 @@ Global
 		{801C0C32-9FB8-4F0E-8C19-99431E8EA1CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{801C0C32-9FB8-4F0E-8C19-99431E8EA1CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{801C0C32-9FB8-4F0E-8C19-99431E8EA1CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6CF92372-EE1F-4E2A-9511-3117570AD995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CF92372-EE1F-4E2A-9511-3117570AD995}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CF92372-EE1F-4E2A-9511-3117570AD995}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CF92372-EE1F-4E2A-9511-3117570AD995}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
