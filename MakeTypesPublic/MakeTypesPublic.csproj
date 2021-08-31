@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
 
         <!--Assembly attributes-->
-        <VersionPrefix>1.0.2</VersionPrefix>
+        <VersionPrefix>1.0.3</VersionPrefix>
         <VersionSuffix Condition="false">alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
         <Description>MSBuild extension 'MakeTypesPublic' is intended to disable access checks to non-public types and its members.</Description>
         <Authors>Denis535</Authors>
