@@ -29,7 +29,7 @@
         <DevelopmentDependency>true</DevelopmentDependency>
         <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
-        <!--Nuget options-->
+        <!--Nuget pack options-->
         <EnableDefaultItems>true</EnableDefaultItems>
         <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
         <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
