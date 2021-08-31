@@ -2,9 +2,8 @@
 The package **MakeTypesPublic** is intended to disable access checks to non-public (private, internal) types and members.
 
 # How to use it
-- You need just add `IgnoreAccessChecks` metadata (`IgnoreAccessChecks="true")` to `ProjectReference` or `PackageReference` items.
-- You can also set `IgnoreAccessChecks` property (`<IgnoreAccessChecks>true</IgnoreAccessChecks>`) to true/false if you want to enable/disable it.
-By default it's enabled only for not design-time builds. So, Visual Studio will show errors but compiler and runtime will work.
+- You should set the `<IgnoreAccessChecks>true</IgnoreAccessChecks>` property. By default it's enabled only for compile-time builds (not for design-time builds). So, Visual Studio will show errors but compiler and runtime will work.
+- You should set up the `ProjectReference` and `PackageReference` items with the `IgnoreAccessChecks="true"` attribute.
 
 # How it works
 There are a few types of access checks:
